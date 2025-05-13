@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models
 from pydantic import BaseModel
+from app.routes.auth import admin_required
 
 router = APIRouter(prefix="/permissions", tags=["Permissions"])
 
@@ -19,7 +20,7 @@ class PermissionOut(PermissionCreate):
 
 # Create Permission
 @router.post("/", response_model=PermissionOut)
-def create_permission(permission: PermissionCreate, db: Session = Depends(get_db)):
+def create_permission(permission: PermissionCreate, db: Session = Depends(get_db), user: models.User = Depends(admin_required)):
     existing = db.query(models.Permission).filter(models.Permission.name == permission.name).first()
     if existing:
         raise HTTPException(status_code=400, detail="Permission name already exists.")
@@ -31,7 +32,7 @@ def create_permission(permission: PermissionCreate, db: Session = Depends(get_db
 
 # Update Permission
 @router.put("/{permission_id}", response_model=PermissionOut)
-def update_permission(permission_id: int, data: PermissionCreate, db: Session = Depends(get_db)):
+def update_permission(permission_id: int, data: PermissionCreate, db: Session = Depends(get_db), user: models.User = Depends(admin_required)):
     perm = db.query(models.Permission).get(permission_id)
     if not perm:
         raise HTTPException(status_code=404, detail="Permission not found.")
@@ -43,7 +44,7 @@ def update_permission(permission_id: int, data: PermissionCreate, db: Session = 
 
 # Delete Permission
 @router.delete("/{permission_id}")
-def delete_permission(permission_id: int, db: Session = Depends(get_db)):
+def delete_permission(permission_id: int, db: Session = Depends(get_db),user: models.User = Depends(admin_required)):
     perm = db.query(models.Permission).get(permission_id)
     if not perm:
         raise HTTPException(status_code=404, detail="Permission not found.")

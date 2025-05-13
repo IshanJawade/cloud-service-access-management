@@ -5,6 +5,8 @@ from app import models, schemas
 from app.database import get_db
 from app.auth_utils import decode_access_token, get_password_hash, verify_password, create_access_token
 from jose import JWTError
+from fastapi import Depends, HTTPException
+from app.models import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
@@ -43,4 +45,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+def admin_required(user: User = Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
     return user
