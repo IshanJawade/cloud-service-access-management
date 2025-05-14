@@ -1,0 +1,32 @@
+[
+  {
+    "name": "access_api1",
+    "endpoint": "/cloud/api1",
+    "description": "Access to Cloud API 1"
+  },
+  {
+    "name": "access_api2",
+    "endpoint": "/cloud/api2",
+    "description": "Access to Cloud API 2"
+  },
+  {
+    "name": "access_api3",
+    "endpoint": "/cloud/api3",
+    "description": "Access to Cloud API 3"
+  },
+  {
+    "name": "access_api4",
+    "endpoint": "/cloud/api4",
+    "description": "Access to Cloud API 4"
+  },
+  {
+    "name": "access_api5",
+    "endpoint": "/cloud/api5",
+    "description": "Access to Cloud API 5"
+  },
+  {
+    "name": "access_api6",
+    "endpoint": "/cloud/api6",
+    "description": "Access to Cloud API 6"
+  }
+]

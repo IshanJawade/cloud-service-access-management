@@ -2,11 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models, schemas
+from app.routes.auth import get_current_user
 
 router = APIRouter(prefix="/subscriptions", tags=["Subscriptions"])
 
 @router.post("/", response_model=schemas.UserSubscriptionOut)
-def create_subscription(sub: schemas.UserSubscriptionCreate, db: Session = Depends(get_db)):
+def create_subscription(sub: schemas.UserSubscriptionCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)):
+
+    # Customers can only subscribe themselves
+    if current_user.role != "admin" and current_user.id != sub.user_id:
+        raise HTTPException(status_code=403, detail="Cannot subscribe other users")
+
     existing = db.query(models.UserSubscription).filter(models.UserSubscription.user_id == sub.user_id).first()
     if existing:
         raise HTTPException(status_code=400, detail="User already subscribed.")
