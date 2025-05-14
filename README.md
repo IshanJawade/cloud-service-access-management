@@ -43,26 +43,6 @@ A backend system built with FastAPI to manage user access to cloud services base
 
 ---
 
-## 🏗️ Project Structure
-
-cloud_access_system/
-├── app/
-│   ├── main.py
-│   ├── models.py
-│   ├── schemas.py
-│   ├── database.py
-│   ├── auth_utils.py
-│   ├── routes/
-│   │   ├── auth.py
-│   │   ├── permissions.py
-│   │   ├── plans.py
-│   │   ├── subscriptions.py
-│   │   ├── usage.py
-│   │   └── cloud_services.py
-└── README.md
-
----
-
 ## 💾 Tech Stack
 
 - ⚡ FastAPI
